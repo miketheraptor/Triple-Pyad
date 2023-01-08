@@ -188,11 +188,14 @@ def main():
         # Render background
         screen.blit(bg_img, (0, 0))
 
-        # Render player's hand
+        # Click and drag card test
+        player.hand.cards[1].render(30, 30, PLAYER_COLOR)
+
+        # # Render player's hand
         for card in player.hand.cards:
             card.render(30, 30, PLAYER_COLOR)
 
-        # Render computer's hand
+        # # Render computer's hand
         for card in computer.hand.cards:
             card.render(560, 30, COMPUTER_COLOR)
 
