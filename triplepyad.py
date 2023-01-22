@@ -14,7 +14,9 @@ import pygame
 from random import randint
 
 
-# Game setting constants
+# === CONSTANTS ===
+
+# Game Settings
 
 DEBUG_MODE = True
 FPS = 60
@@ -92,6 +94,7 @@ class Card:
         screen.blit(font.render(self.w_value, True, (255, 255, 255)), (x_pos+5, y_pos+20))
         screen.blit(font.render(self.name, True, (255, 255, 255)), (x_pos+5, y_pos+125))
 
+
 class Player:
     '''
     Creates a Player object with a deck and a hand.
@@ -162,7 +165,7 @@ def main():
     # Initialize the main screen object
 
     global screen
-    screen = pygame.display.set_mode((700, 500))
+    screen = pygame.display.set_mode((1000, 800))
     pygame.display.set_caption('Triple PyAd')
 
     # Initialize the background gameboard image
@@ -214,7 +217,7 @@ def main():
 
         for event in pygame.event.get():
 
-            # Stop the program if window is closed
+            # Do if window is closed
 
             if event.type == pygame.QUIT:
                 return
@@ -222,6 +225,7 @@ def main():
         # Render background to screen
 
         screen.blit(bg_img, (0,0))
+
         # Render cards to screen
         # P1 Hand, P2 Hand, Cards on board
 
@@ -229,16 +233,15 @@ def main():
 
         ### = USE THIS SECTION FOR DEBUGGING GAME LOOP FEATURES =  ###
         if DEBUG_MODE == True:
-            test_player.hand[1].render(100, 100) # Test rendering a single card
+            # test_player.hand[1].render(100, 100) # Test rendering a single card
 
             # Test rendering a Player's hand[]
-            x_offset, y_offset = 0, 0
+            y_offset = 0
             i = 0
             for card in test_player.hand:
-                test_player.hand[i].render(200 + x_offset, 200 + y_offset)
+                test_player.hand[i].render(700, 25 + y_offset)
                 i += 1
-                x_offset += 25
-                y_offset += 25
+                y_offset += 150
         ### = END GAME LOOP DEBUG SECTION = ###
 
 
