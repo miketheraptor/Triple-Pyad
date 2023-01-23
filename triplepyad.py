@@ -216,45 +216,6 @@ def main():
 
         clock.tick(FPS)
 
-        # Event listener
-
-        for event in pygame.event.get():
-
-            # Do if window is closed
-
-            if event.type == pygame.QUIT:
-                return
-
-            # Do if left mouse button is clicked
-
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    for card in player.hand:
-
-                        if card.card_rect.collidepoint(event.pos):
-                            card.is_dragging = True
-                            logging.info(f'{card.name} card selected')
-                            mouse_x, mouse_y = event.pos
-                            offset_x = card.card_rect.x - mouse_x
-                            offset_y = card.card_rect.y - mouse_y
-
-            # Do if left mouse button is released
-
-            elif event.type == pygame.MOUSEBUTTONUP:
-                if event.button == 1:
-                    for card in player.hand:
-                        if card.is_dragging == True:
-                            card.is_dragging = False
-
-            # Do as mouse moves
-
-            elif event.type == pygame.MOUSEMOTION:
-                for card in player.hand:
-                    if card.is_dragging == True:
-                        mouse_x, mouse_y = event.pos
-                        card.card_rect.x = mouse_x + offset_x
-                        card.card_rect.y = mouse_y + offset_y
-
         # Render background to screen
 
         screen.blit(bg_img, (0,0))
@@ -263,9 +224,8 @@ def main():
 
         # Selected card
 
-        for card in player.hand:
-            if card.is_dragging == True:
-                card.render(card.card_rect.x, card.card_rect.y)
+        if 'selected_card' in locals() and hasattr(selected_card, 'name'):
+            selected_card.render(card.card_rect.x, card.card_rect.y)
 
         # P1 Hand
 
@@ -290,6 +250,46 @@ def main():
 
 
         # Cards on board
+
+        # Event listener
+
+        for event in pygame.event.get():
+
+            # Do if window is closed
+
+            if event.type == pygame.QUIT:
+                return
+
+            # Do if left mouse button is clicked
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    for card in player.hand:
+
+                        if card.card_rect.collidepoint(event.pos):
+                            selected_card = card
+                            player.hand.remove(card)
+                            logging.info(f'{selected_card.name} card selected')
+                            mouse_x, mouse_y = event.pos
+                            offset_x = card.card_rect.x - mouse_x
+                            offset_y = card.card_rect.y - mouse_y
+
+            # Do if left mouse button is released
+
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 1:
+                    player.hand.append(selected_card)
+                    selected_card = None
+
+            # Do as mouse moves
+
+            elif event.type == pygame.MOUSEMOTION:
+                if 'selected_card' in locals():
+                    mouse_x, mouse_y = event.pos
+                    card.card_rect.x = mouse_x + offset_x
+                    card.card_rect.y = mouse_y + offset_y
+
+
 
 
 
