@@ -216,41 +216,6 @@ def main():
 
         clock.tick(FPS)
 
-        # Render background to screen
-
-        screen.blit(bg_img, (0,0))
-
-        # = Render cards to screen = #
-
-        # Selected card
-
-        if 'selected_card' in locals() and hasattr(selected_card, 'name'):
-            selected_card.render(card.card_rect.x, card.card_rect.y)
-
-        # P1 Hand
-
-        y_offset = 0
-        i = 0
-        for card in player.hand:
-            if card.is_dragging == False:
-                player.hand[i].render(700, 25 + y_offset)
-                i += 1
-                y_offset += 150
-
-
-        # P2 Hand
-
-        y_offset = 0
-        i = 0
-        for card in computer.hand:
-            computer.hand[i].render(190, 25 + y_offset)
-            i += 1
-            y_offset += 150
-
-
-
-        # Cards on board
-
         # Event listener
 
         for event in pygame.event.get():
@@ -289,7 +254,40 @@ def main():
                     card.card_rect.x = mouse_x + offset_x
                     card.card_rect.y = mouse_y + offset_y
 
+        # Render background to screen
 
+        screen.blit(bg_img, (0,0))
+
+        # = Render cards to screen = #
+
+        # Selected card
+
+        if 'selected_card' in locals() and hasattr(selected_card, 'name'):
+            selected_card.render(card.card_rect.x, card.card_rect.y)
+
+        # P1 Hand
+
+        y_offset = 0
+        i = 0
+        for card in player.hand:
+            if card.is_dragging == False:
+                player.hand[i].render(700, 25 + y_offset)
+                i += 1
+                y_offset += 150
+
+
+        # P2 Hand
+
+        y_offset = 0
+        i = 0
+        for card in computer.hand:
+            computer.hand[i].render(190, 25 + y_offset)
+            i += 1
+            y_offset += 150
+
+
+
+        # Cards on board
 
 
 
