@@ -87,7 +87,7 @@ class Card:
 
         # Draw the Card and Font
         
-        card_sprite = pygame.draw.rect(screen, (color), (x_pos, y_pos, 115, 145))
+        self.card_rect = pygame.draw.rect(screen, (color), (x_pos, y_pos, 115, 145))
         screen.blit(font.render(self.n_value, True, (255, 255, 255)), (x_pos+20, y_pos+5))
         screen.blit(font.render(self.e_value, True, (255, 255, 255)), (x_pos+35, y_pos+20))
         screen.blit(font.render(self.s_value, True, (255, 255, 255)), (x_pos+20, y_pos+35))
@@ -174,6 +174,9 @@ def main():
 
     # Initialize players
 
+    player = Player('player', 'test_deck.csv')
+    computer = Player('computer', 'test_deck.csv')
+
     # Initialize clock
     
     clock = pygame.time.Clock()
@@ -181,10 +184,10 @@ def main():
 
 
     ### = USE THIS SECTION FOR DEBUGGING SETUP FEATURES =  ###
-    if DEBUG_MODE == True:
-        test_card = Card('test_card', 4, 3, 2, 1, 'test_player') # Card object test
-        test_player = Player('test_player', 'test_deck.csv') # Player object test
-        test_computer = Player('test_computer', 'test_deck.csv') # Computer object test
+    # if DEBUG_MODE == True:
+    #     test_card = Card('test_card', 4, 3, 2, 1, 'test_player') # Card object test
+    #     test_player = Player('test_player', 'test_deck.csv') # Player object test
+    #     test_computer = Player('test_computer', 'test_deck.csv') # Computer object test
     ### = END SETUP DEBUG SECTION = ###
 
 
@@ -222,26 +225,85 @@ def main():
             if event.type == pygame.QUIT:
                 return
 
+            # Do if left mouse button is clicked
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    for card in player.hand:
+
+                        if card.card_rect.collidepoint(event.pos):
+                            card.is_dragging = True
+                            logging.info(f'{card.name} card selected')
+                            mouse_x, mouse_y = event.pos
+                            offset_x = card.card_rect.x - mouse_x
+                            offset_y = card.card_rect.y - mouse_y
+
+            # Do if left mouse button is released
+
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 1:
+                    for card in player.hand:
+                        if card.is_dragging == True:
+                            card.is_dragging = False
+
+            # Do as mouse moves
+
+            elif event.type == pygame.MOUSEMOTION:
+                for card in player.hand:
+                    if card.is_dragging == True:
+                        mouse_x, mouse_y = event.pos
+                        card.card_rect.x = mouse_x + offset_x
+                        card.card_rect.y = mouse_y + offset_y
+
         # Render background to screen
 
         screen.blit(bg_img, (0,0))
 
-        # Render cards to screen
-        # P1 Hand, P2 Hand, Cards on board
+        # = Render cards to screen = #
+
+        # Selected card
+
+        for card in player.hand:
+            if card.is_dragging == True:
+                card.render(card.card_rect.x, card.card_rect.y)
+
+        # P1 Hand
+
+        y_offset = 0
+        i = 0
+        for card in player.hand:
+            if card.is_dragging == False:
+                player.hand[i].render(700, 25 + y_offset)
+                i += 1
+                y_offset += 150
+
+
+        # P2 Hand
+
+        y_offset = 0
+        i = 0
+        for card in computer.hand:
+            computer.hand[i].render(190, 25 + y_offset)
+            i += 1
+            y_offset += 150
+
+
+
+        # Cards on board
 
 
 
         ### = USE THIS SECTION FOR DEBUGGING GAME LOOP FEATURES =  ###
-        if DEBUG_MODE == True:
+        # if DEBUG_MODE == True:
             # test_player.hand[1].render(100, 100) # Test rendering a single card
 
             # Test rendering a Player's hand[]
-            y_offset = 0
-            i = 0
-            for card in test_player.hand:
-                test_player.hand[i].render(700, 25 + y_offset)
-                i += 1
-                y_offset += 150
+            # y_offset = 0
+            # i = 0
+            # for card in test_player.hand:
+            #     test_player.hand[i].render(700, 25 + y_offset)
+            #     i += 1
+            #     y_offset += 150
         ### = END GAME LOOP DEBUG SECTION = ###
 
 
