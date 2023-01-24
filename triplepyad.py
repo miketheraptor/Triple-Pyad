@@ -182,16 +182,6 @@ def main():
     clock = pygame.time.Clock()
 
 
-
-    ### = USE THIS SECTION FOR DEBUGGING SETUP FEATURES =  ###
-    # if DEBUG_MODE == True:
-    #     test_card = Card('test_card', 4, 3, 2, 1, 'test_player') # Card object test
-    #     test_player = Player('test_player', 'test_deck.csv') # Player object test
-    #     test_computer = Player('test_computer', 'test_deck.csv') # Computer object test
-    ### = END SETUP DEBUG SECTION = ###
-
-
-
     ### ====== END INITIALIZATION/SETUP ====== ###
     ##############################################
 
@@ -233,37 +223,13 @@ def main():
 
                         if card.card_rect.collidepoint(event.pos):
                             selected_card = card
-                            player.hand.remove(card)
                             logging.info(f'{selected_card.name} card selected')
-                            mouse_x, mouse_y = event.pos
-                            offset_x = card.card_rect.x - mouse_x
-                            offset_y = card.card_rect.y - mouse_y
-
-            # Do if left mouse button is released
-
-            elif event.type == pygame.MOUSEBUTTONUP:
-                if event.button == 1:
-                    player.hand.append(selected_card)
-                    selected_card = None
-
-            # Do as mouse moves
-
-            elif event.type == pygame.MOUSEMOTION:
-                if 'selected_card' in locals():
-                    mouse_x, mouse_y = event.pos
-                    card.card_rect.x = mouse_x + offset_x
-                    card.card_rect.y = mouse_y + offset_y
 
         # Render background to screen
 
         screen.blit(bg_img, (0,0))
 
         # = Render cards to screen = #
-
-        # Selected card
-
-        if 'selected_card' in locals() and hasattr(selected_card, 'name'):
-            selected_card.render(card.card_rect.x, card.card_rect.y)
 
         # P1 Hand
 
@@ -285,24 +251,7 @@ def main():
             i += 1
             y_offset += 150
 
-
-
         # Cards on board
-
-
-
-        ### = USE THIS SECTION FOR DEBUGGING GAME LOOP FEATURES =  ###
-        # if DEBUG_MODE == True:
-            # test_player.hand[1].render(100, 100) # Test rendering a single card
-
-            # Test rendering a Player's hand[]
-            # y_offset = 0
-            # i = 0
-            # for card in test_player.hand:
-            #     test_player.hand[i].render(700, 25 + y_offset)
-            #     i += 1
-            #     y_offset += 150
-        ### = END GAME LOOP DEBUG SECTION = ###
 
 
 
