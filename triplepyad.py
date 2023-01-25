@@ -58,7 +58,7 @@ class Card:
         self.s_value = s_value
         self.w_value = w_value
         self.owner = owner
-        self.is_dragging = False
+        self.is_selected = False
 
         logging.info(
             f'Created Card: {self.name}, {self.n_value}, {self.e_value}, {self.s_value}, {self.w_value}, {self.owner}'
@@ -85,14 +85,22 @@ class Card:
 
         font = pygame.font.SysFont('Arial', 15)
 
-        # Draw the Card and Font
+        # ===  Draw the Card and Font ===
         
-        self.card_rect = pygame.draw.rect(screen, (color), (x_pos, y_pos, 115, 145))
-        screen.blit(font.render(self.n_value, True, (255, 255, 255)), (x_pos+20, y_pos+5))
-        screen.blit(font.render(self.e_value, True, (255, 255, 255)), (x_pos+35, y_pos+20))
-        screen.blit(font.render(self.s_value, True, (255, 255, 255)), (x_pos+20, y_pos+35))
-        screen.blit(font.render(self.w_value, True, (255, 255, 255)), (x_pos+5, y_pos+20))
-        screen.blit(font.render(self.name, True, (255, 255, 255)), (x_pos+5, y_pos+125))
+        # If the card being draw is the selected card, offset its position by x_offset
+
+        if self.is_selected:
+            x_offset = 15
+        else:
+            x_offset = 0
+
+        # Draw the cards with name and ranks
+        self.card_rect = pygame.draw.rect(screen, (color), (x_pos - x_offset, y_pos, 115, 145))
+        screen.blit(font.render(self.n_value, True, (255, 255, 255)), (x_pos - x_offset + 20, y_pos+5))
+        screen.blit(font.render(self.e_value, True, (255, 255, 255)), (x_pos - x_offset + 35, y_pos+20))
+        screen.blit(font.render(self.s_value, True, (255, 255, 255)), (x_pos - x_offset + 20, y_pos+35))
+        screen.blit(font.render(self.w_value, True, (255, 255, 255)), (x_pos - x_offset + 5, y_pos+20))
+        screen.blit(font.render(self.name, True, (255, 255, 255)), (x_pos - x_offset + 5, y_pos+125))
 
 
 class Player:
@@ -221,9 +229,12 @@ def main():
                 if event.button == 1:
                     for card in player.hand:
 
+                        if card.is_selected == True:
+                            card.is_selected = False
+                        
                         if card.card_rect.collidepoint(event.pos):
-                            selected_card = card
-                            logging.info(f'{selected_card.name} card selected')
+                            card.is_selected = True
+                            logging.info(f'{card.name} card selected')
 
         # Render background to screen
 
@@ -236,10 +247,9 @@ def main():
         y_offset = 0
         i = 0
         for card in player.hand:
-            if card.is_dragging == False:
-                player.hand[i].render(700, 25 + y_offset)
-                i += 1
-                y_offset += 150
+            player.hand[i].render(700, 25 + y_offset)
+            i += 1
+            y_offset += 150
 
 
         # P2 Hand
