@@ -157,6 +157,51 @@ class Player:
             logging.critical('RULESET not recognized.')
 
 
+class Board:
+    '''
+    Generate a list of Slot objects that simulate a coordinate system.
+
+    Top Left = Board
+    Top Middle = 
+    '''
+    def __init__(self):
+        self.slots = []
+        self.set_board()
+
+    def set_board(self):
+        '''
+        Generates the Slot objects for the gameboard.
+        '''
+        top_left = Slot()
+        top_middle = Slot()
+        top_right = Slot()
+        center_left = Slot()
+        center_middle = Slot()
+        center_right = Slot()
+        bottom_left = Slot()
+        bottom_middle = Slot()
+        bottom_right = Slot()
+
+        row_1 = [top_left, top_middle, top_right]
+        row_2 = [center_left, center_middle, center_right]
+        row_3 = [bottom_left, bottom_middle, bottom_right]
+
+        self.slots.append(row_1)
+        self.slots.append(row_2)
+        self.slots.append(row_3)
+
+        logging.info(f'{self.slots}')
+        
+
+
+
+class Slot:
+    '''
+    A Slot which can contain a Card object.
+    '''
+    def __init__(self):
+        self.card = None
+
 
 
 def main():
@@ -179,6 +224,10 @@ def main():
     # Initialize the background gameboard image
 
     bg_img = pygame.image.load('board.png')
+
+    # Initialize board
+
+    board = Board()
 
     # Initialize players
 
